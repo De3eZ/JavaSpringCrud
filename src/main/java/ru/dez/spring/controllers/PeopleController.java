@@ -10,9 +10,6 @@ import ru.dez.spring.models.Person;
 
 import javax.validation.Valid;
 
-/**
- * @author Neil Alishev
- */
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
