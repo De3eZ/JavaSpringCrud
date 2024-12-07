@@ -93,9 +93,13 @@ public class PersonDAO {
         statement.setInt(2, updatedPerson.getAge());
         statement.setString(3, updatedPerson.getEmail());
         statement.setInt(4, id);
+
+        statement.executeUpdate();
     }
 
-    public void delete(int id) {
-        people.removeIf(p -> p.getId() == id);
+    public void delete(int id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM Person Where id=?");
+        statement.setInt(1, id);
+        statement.executeUpdate();
     }
 }
