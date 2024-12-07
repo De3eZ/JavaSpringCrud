@@ -56,8 +56,20 @@ public class PersonDAO {
         return persons;
     }
 
-    public Person show(int id) {
-        //return people.stream().filter(person -> person.getId() == id).findAny().orElse(null);
+    public Person show(int id) throws SQLException {
+        Person person = new Person();
+        PreparedStatement statement = connection.prepareStatement("SELECT from Person Where id=?");
+        statement.setInt(1,id);
+        ResultSet resultSet = statement.executeQuery();
+
+        resultSet.next();
+
+        person.setId(resultSet.getInt("id"));
+        person.setName(resultSet.getString("name"));
+        person.setAge(resultSet.getInt("age"));
+        person.setEmail(resultSet.getString("email"));
+
+        return person;
     }
 
     public void save(Person person) {
