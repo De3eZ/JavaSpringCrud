@@ -62,9 +62,13 @@ public class PersonDAO {
 
     public void save(Person person) {
         try {
-            Statement statement = connection.createStatement();
-            String SQL = "insert into person VALUES ("+1+",'" + person.getName() + "',"+person.getAge()+",'"+person.getEmail()+"')";
-            statement.executeUpdate(SQL);
+            PreparedStatement statement = connection.prepareStatement("INSERT into person VALUES (1,?,?,?)");
+
+            statement.setString(1, person.getName());
+            statement.setInt(2, person.getAge());
+            statement.setString(3, person.getEmail());
+
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
