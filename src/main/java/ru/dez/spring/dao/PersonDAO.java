@@ -1,6 +1,7 @@
 package ru.dez.spring.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -21,42 +22,23 @@ public class PersonDAO {
     }
 
     public List<Person> index() {
-       return jdbcTemplate.query("select * from person", new PersonMapper());
+       return jdbcTemplate.query("select * from person", new BeanPropertyRowMapper<>(Person.class));
     }
 
     public Person show(int id) {
-        return jdbcTemplate.query("select * from person WHERE id=?", new Object[]{id}, new PersonMapper())
+        return jdbcTemplate.query("select * from person WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny().orElse(null);
     }
 
     public void save(Person person) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("INSERT into person VALUES (1,?,?,?)");
-
-            statement.setString(1, person.getName());
-            statement.setInt(2, person.getAge());
-            statement.setString(3, person.getEmail());
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        jdbcTemplate.update("INSERT into Person VALUES (1, ?, ?, ?)", person.getName(), person.getAge(), person.getEmail());
     }
 
     public void update(int id, Person updatedPerson) throws SQLException {
-       PreparedStatement statement = connection.prepareStatement("Update Person set name=?, age=?, email=? where id=?");
-
-        statement.setString(1, updatedPerson.getName());
-        statement.setInt(2, updatedPerson.getAge());
-        statement.setString(3, updatedPerson.getEmail());
-        statement.setInt(4, id);
-
-        statement.executeUpdate();
+        jdbcTemplate.update("UPDATE Persom SET name=?, age=?, email=? WHERE id=?", updatedPerson.getName(), updatedPerson.getAge(), updatedPerson.getEmail(), id);
     }
 
     public void delete(int id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("DELETE FROM Person Where id=?");
-        statement.setInt(1, id);
-        statement.executeUpdate();
+       jdbcTemplate.update("DELETE FROM person WHERE id=?", id);
     }
 }
