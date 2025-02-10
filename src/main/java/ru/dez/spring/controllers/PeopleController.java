@@ -9,11 +9,11 @@ import ru.dez.spring.dao.PersonDAO;
 import ru.dez.spring.models.Person;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
-
     private final PersonDAO personDAO;
 
     @Autowired
@@ -22,13 +22,13 @@ public class PeopleController {
     }
 
     @GetMapping()
-    public String index(Model model) {
+    public String index(Model model) throws SQLException {
         model.addAttribute("people", personDAO.index());
         return "people/index";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model) throws SQLException {
         model.addAttribute("person", personDAO.show(id));
         return "people/show";
     }
@@ -49,14 +49,14 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") int id) throws SQLException {
         model.addAttribute("person", personDAO.show(id));
         return "people/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
-                         @PathVariable("id") int id) {
+                         @PathVariable("id") int id) throws SQLException {
         if (bindingResult.hasErrors())
             return "people/edit";
 
@@ -65,7 +65,7 @@ public class PeopleController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") int id) throws SQLException {
         personDAO.delete(id);
         return "redirect:/people";
     }
