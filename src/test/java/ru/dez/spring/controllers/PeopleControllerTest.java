@@ -4,6 +4,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,5 +56,37 @@ class PeopleControllerTest {
     @Test
     void testShowPerson() throws Exception {
        mockMvc.perform(get("/people/1")).andExpect((ResultMatcher) jsonPath("$").value(0));
+    }
+
+    @AfterEach
+    void tearDown() {
+    }
+
+    @Test
+    void index() {
+    }
+
+    @Test
+    void show() {
+    }
+
+    @Test
+    void newPerson() {
+    }
+
+    @Test
+    void create() {
+    }
+
+    @Test
+    void edit() {
+    }
+
+    @Test
+    void update() {
+    }
+
+    @Test
+    void delete() {
     }
 }
